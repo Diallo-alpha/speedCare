@@ -49,3 +49,38 @@ body {
     color: white;
     font-size: 24px;
 }
+
+/* Nouveaux styles pour les cartes de dépenses */
+#expensesList .item {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 5px;
+    background-color: white;
+}
+#expensesList .item.green-border {
+    border-color: green;
+}
+#expensesList .item.red-border {
+    border-color: red;
+}
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    margin-top: 10px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+}
+.btn-green {
+    background-color: green;
+    color: white;
+}
+.btn-red {
+    background-color: red;
+    color: white;
+    float: right;
+    cursor: pointer;
+    margin-top: -5px;
+}
