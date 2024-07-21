@@ -16,7 +16,6 @@ firebase.initializeApp(firebaseConfig);
 const database = firebase.database();
 const auth = firebase.auth(); // Pour la déconnexion
 
-// Fonction pour afficher les dépenses du jour
 function renderExpenses() {
     const expenseContainer = document.getElementById("expensesList");
 
@@ -53,7 +52,7 @@ function renderExpenses() {
                         <p class="price"><span>Prix :</span> ${expense.price}</p>
                         <p class="quantity"><span>Quantité :</span> ${expense.quantity}</p>
                         <div class="actions">
-                            <button class="buy-btn" ${expense.purchased ? 'disabled' : ''} onclick="purchaseExpense('${id}', ${expense.price})">Acheter</button>
+                            <button class="buy-btn" ${expense.purchased ? 'style="display: none;"' : ''} onclick="purchaseExpense('${id}', ${expense.price})">Acheter</button>
                             <i class="fas fa-trash btn-red" onclick="deleteExpense('${id}')"></i>
                         </div>
                     `;
@@ -141,7 +140,18 @@ function addToMonthlyExpenses(price, year, month) {
 // Afficher les dépenses du jour lorsque le document est chargé
 document.addEventListener("DOMContentLoaded", () => {
     renderExpenses();
+    displayUserName(); // Afficher le nom de l'utilisateur connecté
 });
+
+// Fonction pour afficher le nom de l'utilisateur connecté
+function displayUserName() {
+    auth.onAuthStateChanged(user => {
+        if (user) {
+            const userNameElement = document.getElementById('userName');
+            userNameElement.innerText = user.displayName || user.email;
+        }
+    });
+}
 
 // Fonction de déconnexion
 function logout() {

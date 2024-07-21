@@ -11,7 +11,7 @@
     <div class="container">
         <div class="header">
             <p class="greeting">Bonjour</p>
-            <p class="name">Mr DEMBA</p>
+            <p class="name" id="userName"></p>
             <div class="message">
                 <span>Voici les dépenses prévues pour aujourd'hui.</span>
                 <span>Bonne journée !</span>
@@ -21,14 +21,14 @@
         <div id="expensesList">
             <!-- Les dépenses du jour seront ajoutées ici -->
         </div>
-        <div class="monthly-expenses">
-            <h3>Total des frais du mois : <span id="totalMonthlyExpenses">0</span> €</h3>
-        </div>
     </div>
     <div class="footer">
         <a href="accueil.html"><i class="fas fa-home"></i></a>
         <a href="jour.html"><i class="fas fa-receipt"></i></a>
         <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i></a>
+    </div>
+    <div class="total-monthly-expenses">
+        <p>Total des frais du mois : <span id="totalMonthlyExpenses">0</span> €</p>
     </div>
     <!-- Inclure les scripts Firebase et le script principal -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
