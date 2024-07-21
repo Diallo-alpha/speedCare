@@ -125,17 +125,6 @@ function calculateMonthlyExpenses(year, month) {
         });
 }
 
-// Fonction pour ajouter à la somme des frais du mois
-function addToMonthlyExpenses(price, year, month) {
-    const ref = database.ref(`monthlyExpenses/${year}-${month}`);
-    ref.transaction((currentTotal) => {
-        return (currentTotal || 0) + price;
-    }).then(() => {
-        calculateMonthlyExpenses(year, month);
-    }).catch((error) => {
-        console.error(`Erreur lors de l'ajout aux frais du mois : ${error.message}`);
-    });
-}
 
 // Afficher les dépenses du jour lorsque le document est chargé
 document.addEventListener("DOMContentLoaded", () => {

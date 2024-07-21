@@ -80,7 +80,6 @@ body {
 .red-border {
     border: 2px solid red;
 }
-
 .green-border {
     border: 2px solid green;
 }
@@ -97,4 +96,30 @@ body {
 .footer i {
     color: #fff;
     font-size: 24px;
+}
+
+/* Media query for mobile devices */
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+    .header .greeting,
+    .header .name {
+        font-size: 16px;
+    }
+    .header .message {
+        font-size: 14px;
+    }
+    .title {
+        font-size: 16px;
+    }
+    .card {
+        padding: 10px;
+    }
+    .card .name, .card .price, .card .quantity {
+        font-size: 14px;
+    }
+    .footer i {
+        font-size: 20px;
+    }
 }

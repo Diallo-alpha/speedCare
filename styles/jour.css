@@ -84,3 +84,32 @@ body {
     cursor: pointer;
     margin-top: -5px;
 }
+
+/* Media query for mobile devices */
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+    .date-item {
+        padding: 10px 0;
+    }
+    .date-number {
+        font-size: 20px;
+    }
+    .date-text .day {
+        font-size: 18px;
+    }
+    .date-text .month {
+        font-size: 12px;
+    }
+    .footer i {
+        font-size: 20px;
+    }
+    #expensesList .item {
+        padding: 8px;
+    }
+    .btn {
+        padding: 8px 16px;
+        font-size: 14px;
+    }
+}
