@@ -53,7 +53,7 @@ input[type="text"], input[type="number"] {
 .item {
     border: 2px solid red;
     padding: 10px;
-    border-radius: 5px;
+    border-radius: 5px; 
     margin-top: 20px;
 }
 .item p {

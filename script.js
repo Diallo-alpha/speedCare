@@ -47,6 +47,7 @@ function register(event) {
         last_login: Date.now()
       };
 
+      // Enregistrement des données utilisateur dans la base de données
       database.ref('users/' + user.uid).set(user_data)
         .then(() => {
           console.log('Données utilisateur enregistrées avec succès.');
@@ -58,10 +59,8 @@ function register(event) {
         });
     })
     .catch((error) => {
-      const error_code = error.code;
-      const error_message = error.message;
       console.error('Erreur lors de la création de l\'utilisateur :', error);
-      alert(error_message);
+      alert(error.message);
     });
 }
 
@@ -110,56 +109,118 @@ function validate_password(password) {
   return password.length >= 6;
 }
 
-// Générer les jours du mois pour l'affichage
-document.addEventListener('DOMContentLoaded', (event) => {
-  generateMonthDays();
-  setupExpenseForm();
-});
+document.addEventListener("DOMContentLoaded", () => {
+  const expenseForm = document.getElementById("expenseForm");
+  const expenseContainer = document.getElementById("expensesList");
+  const messageDiv = document.getElementById("message");
 
-function generateMonthDays() {
-  const dateContainer = document.getElementById('date-container');
+  // Obtenir la date du jour
   const today = new Date();
-  const year = today.getFullYear();
-  const month = today.getMonth();
-  const monthNames = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
-  const dayNames = ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"];
+  const todayDateString = today.toISOString().split('T')[0]; // Format YYYY-MM-DD
 
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
-
-  for (let day = 1; day <= daysInMonth; day++) {
-    const currentDate = new Date(year, month, day);
-    const dayName = dayNames[currentDate.getDay()];
-    const monthName = monthNames[month];
-
-    const dateItem = document.createElement('div');
-    dateItem.classList.add('date-item');
-
-    const dateNumber = document.createElement('div');
-    dateNumber.classList.add('date-number');
-    dateNumber.textContent = day;
-
-    const dateText = document.createElement('div');
-    dateText.classList.add('date-text');
-
-    const dayText = document.createElement('div');
-    dayText.classList.add('day');
-    dayText.textContent = dayName;
-
-    const monthText = document.createElement('div');
-    monthText.classList.add('month');
-    monthText.textContent = monthName;
-
-    dateText.appendChild(dayText);
-    dateText.appendChild(monthText);
-
-    dateItem.appendChild(dateNumber);
-    dateItem.appendChild(dateText);
-
-    // Ajouter un gestionnaire de clic pour rediriger vers add.html
-    dateItem.addEventListener('click', () => {
-      window.location.href = "add.html";
-    });
-
-    dateContainer.appendChild(dateItem);
+  // Fonction pour afficher un message
+  function showMessage(message, type) {
+      messageDiv.textContent = message;
+      messageDiv.className = `alert alert-${type}`;
+      setTimeout(() => {
+          messageDiv.textContent = "";
+          messageDiv.className = "";
+      }, 2000);
   }
-}
+
+  // Fonction pour ajouter une dépense à Firebase
+  function addExpense(expense) {
+      database.ref(`expenses/${todayDateString}`).push(expense)
+          .then(() => {
+              showMessage("Dépense ajoutée avec succès", "success");
+              alert("Dépense ajoutée avec succès");
+              renderExpenses();
+          })
+          .catch((error) => {
+              console.log(`Erreur lors de l'ajout de la dépense : ${error.message}`);
+              showMessage(`Erreur : ${error.message}`, "danger");
+          });
+  }
+
+  // Fonction pour supprimer une dépense de Firebase
+  window.deleteExpense = function(id) {
+      database.ref(`expenses/${todayDateString}/${id}`).remove()
+          .then(() => {
+              showMessage("Dépense supprimée avec succès", "success");
+              alert("Dépense supprimée avec succès");
+              renderExpenses();
+          })
+          .catch((error) => {
+              console.log(`Erreur lors de la suppression de la dépense : ${error.message}`);
+              showMessage(`Erreur : ${error.message}`, "danger");
+          });
+  }
+
+  // Fonction pour marquer une dépense comme achetée
+  window.purchaseExpense = function(id) {
+      database.ref(`expenses/${todayDateString}/${id}`).update({ purchased: true })
+          .then(() => {
+              showMessage("Dépense achetée", "success");
+              alert("Dépense achetée");
+              renderExpenses();
+          })
+          .catch((error) => {
+              console.log(`Erreur lors du marquage de la dépense : ${error.message}`);
+              showMessage(`Erreur : ${error.message}`, "danger");
+          });
+  }
+
+  // Fonction pour afficher les dépenses du jour
+  function renderExpenses() {
+      database.ref(`expenses/${todayDateString}`).once('value')
+          .then((snapshot) => {
+              expenseContainer.innerHTML = "";
+              snapshot.forEach((childSnapshot) => {
+                  const expense = childSnapshot.val();
+                  const id = childSnapshot.key;
+
+                  const item = document.createElement('div');
+                  item.className = `item ${expense.purchased ? 'purchased' : 'not-purchased'}`;
+                  item.innerHTML = `
+                      <p><strong>Nom :</strong> ${expense.name}</p>
+                      <p><strong>Prix :</strong> ${expense.price}</p>
+                      <p><strong>Quantité :</strong> ${expense.quantity}</p>
+                      <button class="btn-green" onclick="purchaseExpense('${id}')">Acheter</button>
+                      <i class="fas fa-trash btn-red" onclick="deleteExpense('${id}')"></i>
+                  `;
+                  expenseContainer.appendChild(item);
+              });
+          })
+          .catch((error) => {
+              console.log(`Erreur lors du rendu des dépenses : ${error.message}`);
+              showMessage(`Erreur : ${error.message}`, "danger");
+          });
+  }
+
+  // Validation et soumission du formulaire
+  expenseForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const name = document.getElementById("name").value.trim();
+      const quantity = document.getElementById("quantity").value;
+      const price = document.getElementById("price").value;
+
+      if (name === "" || quantity === "" || price === "") {
+          showMessage("Tous les champs sont requis", "danger");
+          return;
+      }
+
+      const newExpense = {
+          name,
+          quantity,
+          price,
+          purchased: false
+      };
+
+      addExpense(newExpense);
+      expenseForm.reset();
+  });
+
+  // Affichage initial des dépenses du jour
+  renderExpenses();
+});

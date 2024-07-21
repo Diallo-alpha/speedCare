@@ -80,7 +80,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 showMessage(`Erreur : ${error.message}`, "danger");
             });
     }
-
+ 
     // Fonction pour afficher les dépenses
     function renderExpenses() {
         database.ref(`expenses/${selectedDate}`).once('value')
