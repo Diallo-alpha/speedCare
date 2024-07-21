@@ -77,6 +77,13 @@ body {
     color: red;
     cursor: pointer;
 }
+.red-border {
+    border: 2px solid red;
+}
+
+.green-border {
+    border: 2px solid green;
+}
 .footer {
     background-color: #007bff;
     padding: 10px 0;

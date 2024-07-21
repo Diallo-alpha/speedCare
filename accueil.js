@@ -53,7 +53,7 @@ function renderExpenses() {
                         <p class="price"><span>Prix :</span> ${expense.price}</p>
                         <p class="quantity"><span>Quantité :</span> ${expense.quantity}</p>
                         <div class="actions">
-                            <button class="buy-btn" onclick="purchaseExpense('${id}')">Acheter</button>
+                            <button class="buy-btn" ${expense.purchased ? 'disabled' : ''} onclick="purchaseExpense('${id}', ${expense.price})">Acheter</button>
                             <i class="fas fa-trash btn-red" onclick="deleteExpense('${id}')"></i>
                         </div>
                     `;
@@ -62,6 +62,9 @@ function renderExpenses() {
             } else {
                 expenseContainer.innerHTML = "<p>Aucune dépense pour aujourd'hui.</p>";
             }
+
+            // Calculer la somme des frais du mois
+            calculateMonthlyExpenses(year, month);
         })
         .catch((error) => {
             console.error(`Erreur lors de la récupération des dépenses : ${error.message}`);
@@ -69,7 +72,7 @@ function renderExpenses() {
 }
 
 // Fonction pour marquer une dépense comme achetée
-window.purchaseExpense = function(id) {
+window.purchaseExpense = function(id, price) {
     const today = new Date();
     const year = today.getFullYear();
     const month = today.getMonth() + 1; // Les mois sont de 0 à 11
@@ -77,6 +80,8 @@ window.purchaseExpense = function(id) {
     const formattedDate = `${year}-${month}-${day}`;
     database.ref(`expenses/${formattedDate}/${id}`).update({ purchased: true })
         .then(() => {
+            // Ajouter le prix à la somme des frais du mois
+            addToMonthlyExpenses(price, year, month);
             renderExpenses(); // Recharger les dépenses après mise à jour
         })
         .catch((error) => {
@@ -98,6 +103,39 @@ window.deleteExpense = function(id) {
         .catch((error) => {
             console.error(`Erreur lors de la suppression de la dépense : ${error.message}`);
         });
+}
+
+// Fonction pour calculer la somme des frais du mois
+function calculateMonthlyExpenses(year, month) {
+    const ref = database.ref(`expenses/${year}-${month}`);
+    ref.once('value')
+        .then((snapshot) => {
+            let total = 0;
+            snapshot.forEach((daySnapshot) => {
+                daySnapshot.forEach((expenseSnapshot) => {
+                    const expense = expenseSnapshot.val();
+                    if (expense.purchased) {
+                        total += expense.price;
+                    }
+                });
+            });
+            document.getElementById('totalMonthlyExpenses').innerText = total;
+        })
+        .catch((error) => {
+            console.error(`Erreur lors du calcul des frais du mois : ${error.message}`);
+        });
+}
+
+// Fonction pour ajouter à la somme des frais du mois
+function addToMonthlyExpenses(price, year, month) {
+    const ref = database.ref(`monthlyExpenses/${year}-${month}`);
+    ref.transaction((currentTotal) => {
+        return (currentTotal || 0) + price;
+    }).then(() => {
+        calculateMonthlyExpenses(year, month);
+    }).catch((error) => {
+        console.error(`Erreur lors de l'ajout aux frais du mois : ${error.message}`);
+    });
 }
 
 // Afficher les dépenses du jour lorsque le document est chargé
