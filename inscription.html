@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spent-Care Inscription</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <script defer src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script defer src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script defer src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <script defer src="script.js"></script>
+    <link rel="stylesheet" href="styles/inscription.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Spent-Care</h1>
+        <h2>Inscription</h2>
+        <form id="register-form" onsubmit="register(event)">
+            <label for="email">Email:</label>
+            <input type="text" id="email" name="email" placeholder="alpha.diallo@exemple.com">
+            
+            <label for="phone">Téléphone:</label>
+            <input type="text" id="phone" name="phone" placeholder="772552525">
+            
+            <label for="password">Mot de passe:</label>
+            <input type="password" id="password" name="password" placeholder="*****">
+            
+            <div style="text-align: left; margin-bottom: 15px;">
+                <input type="checkbox" id="terms" name="terms">
+                <label for="terms" style="display: inline;">J'accepte les conditions d'utilisation et la politique de confidentialité</label>
+            </div>
+            
+            <button type="submit">Inscrire</button>
+        </form>
+    </div>
+</body>
+</html>

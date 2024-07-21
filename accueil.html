@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <title>Depense du jour</title>
+    <link rel="stylesheet" href="styles/accueil.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <p class="greeting">Bonjour</p>
+            <p class="name">Mr DEMBA</p>
+            <div class="message">
+                <span>Voici les dépenses prévues pour aujourd'hui.</span>
+                <span>Bonne journée !</span>
+            </div>
+        </div>
+        <div class="title">Dépense du jour</div>
+        <div class="card green-border">
+            <p class="name">Nom : <span>Viande de bœuf</span></p>
+            <p class="price">Prix : <span>1500</span></p>
+            <p class="quantity">Quantité : <span>2 kg</span></p>
+            <div class="actions">
+                <button class="buy-btn">Acheter</button>
+                <i class="fas fa-trash delete-btn"></i>
+            </div>
+        </div>
+        <div class="card red-border">
+            <p class="name">Nom : <span>Viande de bœuf</span></p>
+            <p class="price">Prix : <span>1500</span></p>
+            <p class="quantity">Quantité : <span>2 kg</span></p>
+            <div class="actions">
+                <button class="buy-btn">Acheter</button>
+                <i class="fas fa-trash delete-btn"></i>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <a href="accueil.html"><i class="fas fa-home"></i></a>
+        <a href="jour.html"><i class="fas fa-receipt"></i></a>
+        <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i></a>
+    </div>    
+    <script defer src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script defer src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script defer src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <script defer src="script.js"></script>
+</body>
+</html>

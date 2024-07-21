@@ -1,0 +1,57 @@
+body {
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+    background: url('../images/back.svg') no-repeat center center fixed;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    color: white;
+}
+.container {
+    background-color: #3b82f6;
+    padding: 20px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+.container h1 {
+    font-size: 36px;
+    margin-bottom: 10px;
+}
+.container h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+.container label {
+    display: block;
+    text-align: left;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+.container input[type="text"],
+.container input[type="password"] {
+    width: 90%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+.container input[type="checkbox"] {
+    margin-right: 10px;
+}
+.container button {
+    background-color: white;
+    color: #3b82f6;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}

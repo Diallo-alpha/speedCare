@@ -1,0 +1,93 @@
+body {
+    background: url('../images/back2.svg') no-repeat center center fixed;
+    background-size: cover;
+    margin: 0;
+    padding: 0;
+}
+.container {
+    padding: 20px;
+}
+.header {
+    text-align: left;
+    margin-bottom: 20px;
+}
+.header p {
+    margin: 5px 0;
+}
+.header .greeting {
+    font-size: 18px;
+    color: #000;
+}
+.header .name {
+    font-size: 18px;
+    color: #6a0dad;
+    font-weight: bold;
+}
+.header .message {
+    font-size: 16px;
+    color: #000;
+}
+.header .message span {
+    display: block;
+}
+.title {
+    font-size: 18px;
+    color: #6a0dad;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+.card {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.card.green-border {
+    border: 2px solid green;
+}
+.card.red-border {
+    border: 2px solid red;
+}
+.card p {
+    margin: 5px 0;
+}
+.card .name, .card .price, .card .quantity {
+    font-size: 16px;
+    color: #000;
+}
+.card .name span, .card .price span, .card .quantity span {
+    font-weight: bold;
+}
+.card .actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+}
+.card .actions .buy-btn {
+    background-color: green;
+    color: #fff;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.card .actions .delete-btn {
+    color: red;
+    cursor: pointer;
+}
+.footer {
+    background-color: #007bff;
+    padding: 10px 0;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+.footer i {
+    color: #fff;
+    font-size: 24px;
+}

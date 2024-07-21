@@ -1,0 +1,39 @@
+body, html {
+    height: 100%;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: url('../images/back.svg') no-repeat center center fixed;
+    background-size: cover;
+    color: white;
+    text-align: center;
+}
+.container {
+    /* background: rgba(0, 0, 0, 0.5); */
+    padding: 20px;
+    border-radius: 10px;
+}
+h1 {
+    font-size: 2.5em;
+    font-weight: bold;
+    margin: 0;
+}
+p {
+    font-size: 1.2em;
+    margin: 20px 0;
+}
+.buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+.buttons a {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 1em;
+}
