@@ -66,3 +66,37 @@ body {
     font-weight: bold;
     text-decoration: none;
 }
+
+/* Media query for mobile devices */
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+        width: 95%;
+        bottom: 10px;
+    }
+    .container h1 {
+        font-size: 1.5em;
+        margin-bottom: 8px;
+    }
+    .container h2 {
+        font-size: 1.2em;
+        margin-bottom: 15px;
+    }
+    .container label {
+        margin-bottom: 3px;
+    }
+    .container input[type="email"],
+    .container input[type="password"] {
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 15px;
+        font-size: 0.9em;
+    }
+    .container button {
+        padding: 8px 16px;
+        font-size: 0.9em;
+    }
+    .container .signup {
+        font-size: 0.8em;
+    }
+}

@@ -12,6 +12,8 @@ const firebaseConfig = {
 // Initialiser Firebase
 firebase.initializeApp(firebaseConfig);
 
+const auth = firebase.auth();
+
 // Générer les jours du mois pour l'affichage
 document.addEventListener('DOMContentLoaded', (event) => {
     generateMonthDays();
@@ -64,4 +66,13 @@ function generateMonthDays() {
 
         dateContainer.appendChild(dateItem);
     }
+}
+function logout() {
+    auth.signOut().then(() => {
+        console.log('Utilisateur déconnecté');
+        window.location.href = "login.html";
+    }).catch((error) => {
+        console.error('Erreur lors de la déconnexion :', error);
+        alert('Erreur lors de la déconnexion : ' + error.message);
+    });
 }
