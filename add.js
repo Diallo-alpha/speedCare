@@ -20,6 +20,15 @@ document.addEventListener("DOMContentLoaded", () => {
     const expenseContainer = document.getElementById("expensesList");
     const messageDiv = document.getElementById("message");
 
+    // Obtenir la date sélectionnée
+    const selectedDate = localStorage.getItem('selectedDate');
+
+    if (!selectedDate) {
+        alert("Aucune date sélectionnée !");
+        window.location.href = "jour.html";
+        return;
+    }
+
     // Fonction pour afficher un message
     function showMessage(message, type) {
         messageDiv.textContent = message;
@@ -32,7 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Fonction pour ajouter une dépense à Firebase
     function addExpense(expense) {
-        database.ref('expenses').push(expense)
+        database.ref(`expenses/${selectedDate}`).push(expense)
             .then(() => {
                 showMessage("Dépense ajoutée avec succès", "success");
                 alert("Dépense ajoutée avec succès");
@@ -46,7 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Fonction pour supprimer une dépense de Firebase
     window.deleteExpense = function(id) {
-        database.ref('expenses/' + id).remove()
+        database.ref(`expenses/${selectedDate}/${id}`).remove()
             .then(() => {
                 showMessage("Dépense supprimée avec succès", "success");
                 alert("Dépense supprimée avec succès");
@@ -60,7 +69,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Fonction pour marquer une dépense comme achetée
     window.purchaseExpense = function(id) {
-        database.ref('expenses/' + id).update({ purchased: true })
+        database.ref(`expenses/${selectedDate}/${id}`).update({ purchased: true })
             .then(() => {
                 showMessage("Dépense achetée", "success");
                 alert("Dépense achetée");
@@ -74,7 +83,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Fonction pour afficher les dépenses
     function renderExpenses() {
-        database.ref('expenses').once('value')
+        database.ref(`expenses/${selectedDate}`).once('value')
             .then((snapshot) => {
                 expenseContainer.innerHTML = "";
                 snapshot.forEach((childSnapshot) => {
