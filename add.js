@@ -14,6 +14,7 @@ firebase.initializeApp(firebaseConfig);
 
 // Initialiser les services Firebase
 const database = firebase.database();
+const auth = firebase.auth();
 
 document.addEventListener("DOMContentLoaded", () => {
     const expenseForm = document.getElementById("expenseForm");
@@ -24,7 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const selectedDate = localStorage.getItem('selectedDate');
 
     if (!selectedDate) {
-        alert("Aucune date sélectionnée !");
+        showMessage("Aucune date sélectionnée !", "danger");
         window.location.href = "jour.html";
         return;
     }
@@ -40,12 +41,11 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Fonction pour ajouter une dépense à Firebase
-    function addExpense(expense) {
-        database.ref(`expenses/${selectedDate}`).push(expense)
+    function addExpense(expense, userId) {
+        database.ref(`expenses/${userId}/${selectedDate}`).push(expense)
             .then(() => {
                 showMessage("Dépense ajoutée avec succès", "success");
-                alert("Dépense ajoutée avec succès");
-                renderExpenses();
+                renderExpenses(userId);
             })
             .catch((error) => {
                 console.log(`Erreur lors de l'ajout de la dépense : ${error.message}`);
@@ -55,41 +55,29 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Fonction pour supprimer une dépense de Firebase
     window.deleteExpense = function(id) {
-        database.ref(`expenses/${selectedDate}/${id}`).remove()
-            .then(() => {
-                showMessage("Dépense supprimée avec succès", "success");
-                alert("Dépense supprimée avec succès");
-                renderExpenses();
-            })
-            .catch((error) => {
-                console.log(`Erreur lors de la suppression de la dépense : ${error.message}`);
-                showMessage(`Erreur : ${error.message}`, "danger");
-            });
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                database.ref(`expenses/${user.uid}/${selectedDate}/${id}`).remove()
+                    .then(() => {
+                        showMessage("Dépense supprimée avec succès", "success");
+                        renderExpenses(user.uid);
+                    })
+                    .catch((error) => {
+                        console.log(`Erreur lors de la suppression de la dépense : ${error.message}`);
+                        showMessage(`Erreur : ${error.message}`, "danger");
+                    });
+            }
+        });
     }
 
-    // Fonction pour marquer une dépense comme achetée
-    window.purchaseExpense = function(id) {
-        database.ref(`expenses/${selectedDate}/${id}`).update({ purchased: true })
-            .then(() => {
-                showMessage("Dépense achetée", "success");
-                alert("Dépense achetée");
-                renderExpenses();
-            })
-            .catch((error) => {
-                console.log(`Erreur lors du marquage de la dépense : ${error.message}`);
-                showMessage(`Erreur : ${error.message}`, "danger");
-            });
-    }
- 
-    // Fonction pour afficher les dépenses
-    function renderExpenses() {
-        database.ref(`expenses/${selectedDate}`).once('value')
+    // Afficher les dépenses de la date sélectionnée
+    function renderExpenses(userId) {
+        database.ref(`expenses/${userId}/${selectedDate}`).once('value')
             .then((snapshot) => {
                 expenseContainer.innerHTML = "";
                 snapshot.forEach((childSnapshot) => {
                     const expense = childSnapshot.val();
                     const id = childSnapshot.key;
-
                     const item = document.createElement('div');
                     item.className = `item ${expense.purchased ? 'purchased' : 'not-purchased'}`;
                     item.innerHTML = `
@@ -128,10 +116,23 @@ document.addEventListener("DOMContentLoaded", () => {
             purchased: false
         };
 
-        addExpense(newExpense);
-        expenseForm.reset();
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                addExpense(newExpense, user.uid);
+                expenseForm.reset();
+            } else {
+                showMessage("Vous devez être connecté pour ajouter une dépense.", "danger");
+            }
+        });
     });
 
-    // Affichage initial des dépenses
-    renderExpenses();
+    // Vérifier l'état de connexion de l'utilisateur
+    auth.onAuthStateChanged(user => {
+        if (user) {
+            renderExpenses(user.uid);
+        } else {
+            showMessage("Vous devez être connecté pour voir vos dépenses.", "danger");
+            window.location.href = "login.html";
+        }
+    });
 });
